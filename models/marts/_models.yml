@@ -22,3 +22,25 @@ models:
           - not_null
           - accepted_values:
               values: [1, 2, 3]
+
+  - name: mart_account_engagement_trend
+    description: "Monthly event counts per client and account with month-over-month delta."
+    columns:
+      - name: client_id
+        tests:
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+      - name: event_month
+        description: "First day of the calendar month"
+        tests:
+          - not_null
+      - name: total_events
+        description: "Distinct events in this month"
+        tests:
+          - not_null
+      - name: prev_month_events
+        description: "Distinct events in the prior month. NULL if first month."
+      - name: mom_change
+        description: "total_events minus prev_month_events. NULL prev_month treated as 0."
