@@ -14,6 +14,7 @@ renamed as (
         cast(employee_count as integer) as employee_count
     from raw_accounts
     where account_id is not null
+        and client_id is not null  -- multi-tenant platform: an account without a client is invalid
 )
 
 select * from renamed
