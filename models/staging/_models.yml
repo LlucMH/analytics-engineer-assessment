@@ -18,8 +18,9 @@ models:
 
   - name: stg_events
     description: >
-      Eventos de engagement limpios. revenue_influenced coalescido a 0
-      para no-conversiones para evitar NULLs en agregaciones downstream.
+      Cleaned engagement events. revenue_influenced is coalesced to 0
+      for non-conversion events (impressions, clicks) to avoid NULLs
+      in downstream aggregations.
     columns:
       - name: event_id
         tests:

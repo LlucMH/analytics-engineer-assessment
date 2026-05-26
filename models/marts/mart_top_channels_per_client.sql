@@ -13,7 +13,7 @@ channel_revenue as (
         c.channel,
         sum(e.revenue_influenced) as total_revenue_influenced
     from events e
-    -- INNER JOIN: eventos sin campaña no tienen channel y no se tienen en cuenta.
+    -- INNER JOIN: events without a campaign have no channel and cannot be aggregated.
     inner join campaigns c
         on e.campaign_id = c.campaign_id
     group by 1, 2
