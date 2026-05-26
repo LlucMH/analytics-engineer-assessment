@@ -2,9 +2,7 @@ version: 2
 
 models:
   - name: mart_top_channels_per_client
-    description: >
-      Top 3 channels per client by revenue influenced over the last 90 days.
-      The window is relative to current_date so it never goes stale.
+    description: "Top 3 channels per client by revenue influenced over the last 90 days."
     columns:
       - name: client_id
         tests:
@@ -44,3 +42,27 @@ models:
         description: "Distinct events in the prior month. NULL if first month."
       - name: mom_change
         description: "total_events minus prev_month_events. NULL prev_month treated as 0."
+
+  - name: mart_efficient_campaigns
+    description: "Campaigns outperforming their channel peers on cost per meeting booked."
+    columns:
+      - name: client_id
+        tests:
+          - not_null
+      - name: campaign_id
+        tests:
+          - not_null
+      - name: campaign_name
+        tests:
+          - not_null
+      - name: channel
+        tests:
+          - not_null
+      - name: budget
+        description: "Planned campaign budget in USD"
+      - name: meetings_booked
+        description: "Number of meeting_booked events for this campaign"
+      - name: cost_per_meeting
+        description: "budget / meetings_booked for this campaign"
+      - name: avg_cost_per_meeting_for_channel
+        description: "Average cost per meeting across all campaigns in the same channel"
