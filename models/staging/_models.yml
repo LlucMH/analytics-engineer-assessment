@@ -72,3 +72,20 @@ models:
           - not_null
       - name: employee_count
         description: "Number of employees at the account"
+
+  - name: stg_ad_spend
+    description: "Cleaned daily ad spend from the agency Parquet file. Incremental on spend_date with 7-day lookback."
+    columns:
+      - name: campaign_id
+        description: "Foreign key to stg_campaigns"
+        tests:
+          - not_null
+      - name: client_id
+        tests:
+          - not_null
+      - name: spend_date
+        description: "Date of the spend record"
+        tests:
+          - not_null
+      - name: actual_spend
+        description: "Actual spend on this date for this campaign in USD"

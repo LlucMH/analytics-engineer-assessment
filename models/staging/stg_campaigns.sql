@@ -5,27 +5,21 @@
     tags=['campaigns']
 ) }}
 
-with source as (
-
-    select * from {{ source('raw', 'raw_campaigns') }}
-
-),
+with source as (select * from {{ source('raw', 'raw_campaigns') }}),
 
 renamed as (
-
     select
         campaign_id,
         client_id,
         channel,
         campaign_name,
-        cast(start_date as date)                                            as start_date,
-        cast(end_date as date)                                              as end_date,
-        cast(budget as decimal)                                             as budget,
-        datediff('day', cast(start_date as date), cast(end_date as date))  as campaign_duration_days
-
+        cast(start_date as date) as start_date,
+        cast(end_date as date) as end_date,
+        cast(budget as decimal) as budget,
+        datediff('day', cast(start_date as date), cast(end_date as date)) as campaign_duration_days
     from source
     where campaign_id is not null
-
+        and client_id is not null -- multi-tenant platform: a campaign without a client is invalid
 )
 
 select * from renamed
