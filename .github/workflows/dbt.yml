@@ -1,0 +1,39 @@
+name: dbt CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  dbt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install dbt-duckdb
+
+      - name: Set up dbt profile
+        run: |
+          mkdir -p ~/.dbt
+          cp profiles.yml ~/.dbt/profiles.yml
+
+      - name: dbt deps
+        run: dbt deps
+
+      - name: dbt seed
+        run: dbt seed
+
+      - name: Register external sources
+        run: python scripts/setup_ad_spend_source.py
+
+      - name: dbt build
+        run: dbt build

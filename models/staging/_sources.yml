@@ -12,8 +12,6 @@ sources:
             description: "Unique campaign identifier"
           - name: client_id
           - name: channel
-            accepted_values:
-              values: ['linkedin', 'google', 'email', 'display', 'content']
 
       - name: raw_events
         description: "Marketing engagement events"
@@ -22,11 +20,31 @@ sources:
             description: "Unique event identifier"
           - name: campaign_id
           - name: event_type
-            accepted_values:
-              values: ['impression', 'click', 'form_fill', 'meeting_booked']
 
       - name: raw_accounts
         description: "B2B accounts (companies) that engage with campaigns"
         columns:
           - name: account_id
             description: "Unique account identifier"
+
+  - name: external
+    description: "External sources registered as DuckDB views over Parquet files"
+    schema: external
+    # DuckDB production alternative: if the agency delivers hive-partitioned parquet files,
+    # configure path with hive_partitioning: true for automatic partition pruning on spend_date.
+    tables:
+      - name: ad_spend
+        description: "Daily actual ad spend per campaign delivered by the media agency"
+        columns:
+          - name: campaign_id
+            tests:
+              - not_null
+          - name: client_id
+            tests:
+              - not_null
+          - name: spend_date
+            tests:
+              - not_null
+          - name: actual_spend
+            tests:
+              - not_null
