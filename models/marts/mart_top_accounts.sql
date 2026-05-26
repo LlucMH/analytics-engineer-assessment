@@ -52,3 +52,51 @@ limit 10
 -- ============================================================
 -- YOUR IMPROVED VERSION:
 -- ============================================================
+
+--with
+-- events as (select * from {{ ref('stg_events') }}),
+
+-- accounts as (select * from {{ ref('stg_accounts') }}),
+
+-- account_metrics as (
+--     select
+--         e.client_id,
+--         e.account_id,
+--         sum(e.revenue_influenced)                   as total_revenue_influenced,
+--         count(distinct e.event_id)                  as total_events,
+--         count(distinct case when e.is_conversion then e.event_id end) as total_conversions
+--     from events e
+--     group by 1, 2
+-- ),
+
+-- ranked as (
+--     select
+--         m.client_id,
+--         m.account_id,
+--         a.account_name,
+--         a.industry,
+--         m.total_revenue_influenced,
+--         m.total_events,
+--         m.total_conversions,
+--         row_number() over (
+--             partition by m.client_id
+--             order by m.total_revenue_influenced desc
+--         ) as account_rank
+--     from account_metrics m
+--     INNER JOIN: unmatched account_ids indicate a data quality issue, not hidden with NULLs.
+--     inner join accounts a
+--         on m.account_id = a.account_id
+--         and m.client_id = a.client_id
+-- )
+
+-- select
+--     client_id,
+--     account_rank,
+--     account_id,
+--     account_name,
+--     industry,
+--     total_revenue_influenced,
+--     total_events,
+--     total_conversions
+-- from ranked
+-- where account_rank <= 10
