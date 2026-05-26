@@ -15,3 +15,28 @@ models:
         description: "Campaign budget in USD"
       - name: campaign_duration_days
         description: "Number of days between start_date and end_date"
+
+  - name: stg_events
+    description: >
+      Eventos de engagement limpios. revenue_influenced coalescido a 0
+      para no-conversiones para evitar NULLs en agregaciones downstream.
+    columns:
+      - name: event_id
+        tests:
+          - unique
+          - not_null
+      - name: campaign_id
+      - name: client_id
+      - name: account_id
+      - name: event_date
+      - name: event_type
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['impression', 'click', 'form_fill', 'meeting_booked']
+      - name: revenue_influenced
+        tests:
+          - not_null
+      - name: is_conversion
+      - name: is_meeting_booked
+      - name: event_month

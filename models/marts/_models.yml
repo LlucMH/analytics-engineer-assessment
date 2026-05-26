@@ -1,3 +1,22 @@
 version: 2
 
-models: []
+models:
+  - name: mart_top_channels_per_client
+    description: >
+      Top 3 canales por cliente por revenue en los últimos 90 días. La ventana es en función de current_date.
+    columns:
+      - name: client_id
+        tests:
+          - not_null
+      - name: channel
+        tests:
+          - not_null
+      - name: total_revenue_influenced
+        tests:
+          - not_null
+      - name: channel_rank
+        description: "1 = canal con más revenue para ese cliente"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3]
