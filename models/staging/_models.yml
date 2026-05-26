@@ -23,21 +23,52 @@ models:
       in downstream aggregations.
     columns:
       - name: event_id
+        description: "Unique event identifier"
         tests:
           - unique
           - not_null
       - name: campaign_id
+        description: "Foreign key to stg_campaigns"
       - name: client_id
+        description: "Client that owns this event"
       - name: account_id
+        description: "Account that generated this event"
       - name: event_date
+        description: "Date the event occurred"
       - name: event_type
+        description: "Funnel stage: impression, click, form_fill, meeting_booked"
         tests:
           - not_null
           - accepted_values:
               values: ['impression', 'click', 'form_fill', 'meeting_booked']
       - name: revenue_influenced
+        description: "Pipeline value attributed to this event. 0 for non-conversion events."
         tests:
           - not_null
       - name: is_conversion
+        description: "True when event_type is form_fill or meeting_booked"
       - name: is_meeting_booked
+        description: "True when event_type is meeting_booked"
       - name: event_month
+        description: "First day of the month the event occurred"
+
+  - name: stg_accounts
+    description: "Cleaned B2B account dimension."
+    columns:
+      - name: account_id
+        description: "Unique account identifier"
+        tests:
+          - unique
+          - not_null
+      - name: client_id
+        description: "Client that owns this account"
+        tests:
+          - not_null
+      - name: account_name
+        tests:
+          - not_null
+      - name: industry
+        tests:
+          - not_null
+      - name: employee_count
+        description: "Number of employees at the account"

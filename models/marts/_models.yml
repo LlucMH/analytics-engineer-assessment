@@ -66,3 +66,20 @@ models:
         description: "budget / meetings_booked for this campaign"
       - name: avg_cost_per_meeting_for_channel
         description: "Average cost per meeting across all campaigns in the same channel"
+
+  - name: mart_top_accounts
+    description: "Top 10 accounts per client by total all-time revenue influenced."
+    columns:
+      - name: client_id
+        tests:
+          - not_null
+      - name: account_rank
+        description: "1 = highest revenue account for that client"
+        tests:
+          - not_null
+      - name: account_id
+        tests:
+          - not_null
+      - name: total_revenue_influenced
+        tests:
+          - not_null
