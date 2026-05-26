@@ -1,3 +1,24 @@
 version: 2
 
-models: []
+models:
+  - name: mart_top_channels_per_client
+    description: >
+      Top 3 channels per client by revenue influenced over the last 90 days.
+      The window is relative to current_date so it never goes stale.
+    columns:
+      - name: client_id
+        tests:
+          - not_null
+      - name: channel
+        tests:
+          - not_null
+      - name: total_revenue_influenced
+        description: "Sum of revenue influenced for all conversion events in the 90-day window"
+        tests:
+          - not_null
+      - name: channel_rank
+        description: "1 = highest revenue channel for that client"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3]
